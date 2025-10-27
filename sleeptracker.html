@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sleep Tracker | Swim Mind</title>
+  <link rel="stylesheet" href="sleeptracker.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Sleep Tracker</h1>
+    <button class="back-btn" onclick="window.location.href='dashboard.html'">← Back to Dashboard</button>
+  </header>
+
+  <main>
+    <section class="sleep-section">
+      <div class="date-navigation">
+        <button id="prev-day">⟨</button>
+        <h2 id="current-date"></h2>
+        <button id="next-day">⟩</button>
+      </div>
+
+      <div class="sleep-inputs">
+        <label>
+          Hours
+          <input type="number" id="hours" min="0" max="24" placeholder="0">
+        </label>
+        <label>
+          Minutes
+          <input type="number" id="minutes" min="0" max="59" placeholder="0">
+        </label>
+        <button id="save-btn">Save</button>
+      </div>
+
+      <p id="sleep-message">No sleep data recorded for today yet.</p>
+    </section>
+
+    <section class="chart-section">
+      <h2>Your Sleep Over Time</h2>
+      <div class="view-options">
+        <label for="view-select">View by: </label>
+        <select id="view-select">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+      <canvas id="sleepChart"></canvas>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Swim Mind App | Track your sleep, strengthen your mind!</p>
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('sleepChart').getContext('2d');
+    let sleepData = JSON.parse(localStorage.getItem('sleepData')) || [];
+    let currentDate = new Date();
+
+    function formatDate(date) {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function formatWeek(date) {
+      const start = new Date(date);
+      start.setDate(date.getDate() - date.getDay()); // Sunday
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6); // Saturday
+      return `${start.toLocaleDateString('en-US')} - ${end.toLocaleDateString('en-US')}`;
+    }
+
+    function formatMonth(date) {
+      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+
+    function displayDate() {
+      document.getElementById('current-date').textContent = formatDate(currentDate);
+      updateSleepMessage();
+    }
+
+    function updateSleepMessage() {
+      const today = sleepData.find(entry => entry.date === formatDate(currentDate));
+      document.getElementById('sleep-message').textContent = today
+        ? `You slept ${today.hours}h ${today.minutes}m on this day.`
+        : `No sleep data recorded for today yet.`;
+    }
+
+    // Navigation buttons
+    document.getElementById('prev-day').addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() - 1);
+      displayDate();
+      updateChart();
+    });
+    document.getElementById('next-day').addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() + 1);
+      displayDate();
+      updateChart();
+    });
+
+    // Save sleep data
+    document.getElementById('save-btn').addEventListener('click', () => {
+      const hours = parseInt(document.getElementById('hours').value) || 0;
+      const minutes = parseInt(document.getElementById('minutes').value) || 0;
+      const totalHours = hours + minutes / 60;
+      const dateStr = formatDate(currentDate);
+
+      sleepData = sleepData.filter(entry => entry.date !== dateStr);
+      sleepData.push({ date: dateStr, hours, minutes, totalHours });
+      localStorage.setItem('sleepData', JSON.stringify(sleepData));
+
+      updateSleepMessage();
+      updateChart();
+    });
+
+    // Chart.js setup
+    const sleepChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Hours Slept',
+          data: [],
+          borderColor: '#00bfff',
+          backgroundColor: 'rgba(0, 191, 255, 0.2)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            min: 0,
+            max: 24,
+            ticks: { stepSize: 2 } // Skip by 2
+          }
+        }
+      }
+    });
+
+    function updateChart() {
+      const view = document.getElementById('view-select').value;
+
+      let labels = [];
+      let data = [];
+
+      if (view === 'daily') {
+        labels = sleepData.map(e => e.date);
+        data = sleepData.map(e => e.totalHours);
+      } else if (view === 'weekly') {
+        const weekMap = {};
+        sleepData.forEach(entry => {
+          const week = formatWeek(new Date(entry.date));
+          if (!weekMap[week]) weekMap[week] = [];
+          weekMap[week].push(entry.totalHours);
+        });
+        labels = Object.keys(weekMap);
+        data = Object.values(weekMap).map(arr => Math.round(arr.reduce((a,b)=>a+b,0)/arr.length*10)/10);
+      } else if (view === 'monthly') {
+        const monthMap = {};
+        sleepData.forEach(entry => {
+          const month = formatMonth(new Date(entry.date));
+          if (!monthMap[month]) monthMap[month] = [];
+          monthMap[month].push(entry.totalHours);
+        });
+        labels = Object.keys(monthMap);
+        data = Object.values(monthMap).map(arr => Math.round(arr.reduce((a,b)=>a+b,0)/arr.length*10)/10);
+      }
+
+      sleepChart.data.labels = labels;
+      sleepChart.data.datasets[0].data = data;
+      sleepChart.update();
+    }
+
+    document.getElementById('view-select').addEventListener('change', updateChart);
+
+    // Initialize
+    displayDate();
+    updateChart();
+  </script>
+</body>
+</html>

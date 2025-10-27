@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood Tracker | Swim Mind</title>
+  <link rel="stylesheet" href="moodtracker.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Mood Tracker</h1>
+    <button class="back-btn" onclick="window.location.href='dashboard.html'">← Back to Dashboard</button>
+  </header>
+
+  <main>
+    <section class="mood-section">
+      <div class="date-navigation">
+        <button id="prev-day">⟨</button>
+        <h2 id="current-date"></h2>
+        <button id="next-day">⟩</button>
+      </div>
+
+      <h3>How are you feeling today?</h3>
+
+      <div class="mood-options">
+        <div class="mood" data-mood="Happy">😄<span>Happy</span></div>
+        <div class="mood" data-mood="Calm">🧘<span>Calm</span></div>
+        <div class="mood" data-mood="Neutral">😐<span>Neutral</span></div>
+        <div class="mood" data-mood="Tired">😴<span>Tired</span></div>
+        <div class="mood" data-mood="Angry">😠<span>Angry</span></div>
+        <div class="mood" data-mood="Sad">😔<span>Sad</span></div>
+      </div>
+
+      <p id="selected-mood-message"></p>
+      <button id="reset-btn" class="reset-btn">Reset Today’s Mood</button>
+    </section>
+
+    <section class="chart-section">
+      <h2>Your Mood Over Time</h2>
+      <div class="view-options">
+        <label for="view-select">View by: </label>
+        <select id="view-select">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </div>
+      <canvas id="moodChart"></canvas>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Swim Mind App | Track your emotions, strengthen your mind!</p>
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('moodChart').getContext('2d');
+    let moodData = JSON.parse(localStorage.getItem('moodData')) || [];
+    let currentDate = new Date();
+
+    const moodRatings = {
+      "Sad": 1,
+      "Angry": 2,
+      "Tired": 3,
+      "Neutral": 4,
+      "Calm": 5,
+      "Happy": 6
+    };
+
+    function formatDate(date) {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function formatWeek(date) {
+      const start = new Date(date);
+      start.setDate(date.getDate() - date.getDay()); // Sunday
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6); // Saturday
+      return `${start.toLocaleDateString('en-US')} - ${end.toLocaleDateString('en-US')}`;
+    }
+
+    function formatMonth(date) {
+      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+
+    function formatYear(date) {
+      return date.getFullYear();
+    }
+
+    function displayDate() {
+      document.getElementById('current-date').textContent = formatDate(currentDate);
+      updateMoodMessage();
+    }
+
+    function updateMoodMessage() {
+      const todayMood = moodData.find(entry => entry.date === formatDate(currentDate));
+      document.getElementById('selected-mood-message').textContent = todayMood
+        ? `You felt ${todayMood.mood} on this day.`
+        : `No mood recorded for this day yet.`;
+    }
+
+    // Navigation buttons
+    document.getElementById('prev-day').addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() - 1);
+      displayDate();
+    });
+    document.getElementById('next-day').addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() + 1);
+      displayDate();
+    });
+
+    // Mood selection
+    document.querySelectorAll('.mood').forEach(mood => {
+      mood.addEventListener('click', () => {
+        const moodName = mood.dataset.mood;
+        const rating = moodRatings[moodName];
+        const dateStr = formatDate(currentDate);
+
+        moodData = moodData.filter(entry => entry.date !== dateStr);
+        moodData.push({ date: dateStr, mood: moodName, rating });
+        localStorage.setItem('moodData', JSON.stringify(moodData));
+
+        updateMoodMessage();
+        updateChart();
+      });
+    });
+
+    // Reset button
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      const dateStr = formatDate(currentDate);
+      moodData = moodData.filter(entry => entry.date !== dateStr);
+      localStorage.setItem('moodData', JSON.stringify(moodData));
+      updateMoodMessage();
+      updateChart();
+    });
+
+    // Chart.js setup
+    const moodChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Mood Rating (1-6)',
+          data: [],
+          borderColor: '#0077b6',
+          backgroundColor: 'rgba(0, 119, 182, 0.2)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { min: 1, max: 6, ticks: { stepSize: 1 } }
+        }
+      }
+    });
+
+    function updateChart() {
+      const view = document.getElementById('view-select').value;
+
+      let chartLabels = [];
+      let chartData = [];
+
+      if (view === 'daily') {
+        chartLabels = moodData.map(m => m.date);
+        chartData = moodData.map(m => m.rating);
+      } else if (view === 'weekly') {
+        const weekMap = {};
+        moodData.forEach(entry => {
+          const week = formatWeek(new Date(entry.date));
+          if (!weekMap[week]) weekMap[week] = [];
+          weekMap[week].push(entry.rating);
+        });
+        chartLabels = Object.keys(weekMap);
+        chartData = Object.values(weekMap).map(arr => Math.round(arr.reduce((a,b)=>a+b,0)/arr.length));
+      } else if (view === 'monthly') {
+        const monthMap = {};
+        moodData.forEach(entry => {
+          const month = formatMonth(new Date(entry.date));
+          if (!monthMap[month]) monthMap[month] = [];
+          monthMap[month].push(entry.rating);
+        });
+        chartLabels = Object.keys(monthMap);
+        chartData = Object.values(monthMap).map(arr => Math.round(arr.reduce((a,b)=>a+b,0)/arr.length));
+      } else if (view === 'yearly') {
+        const yearMap = {};
+        moodData.forEach(entry => {
+          const year = formatYear(new Date(entry.date));
+          if (!yearMap[year]) yearMap[year] = [];
+          yearMap[year].push(entry.rating);
+        });
+        chartLabels = Object.keys(yearMap);
+        chartData = Object.values(yearMap).map(arr => Math.round(arr.reduce((a,b)=>a+b,0)/arr.length));
+      }
+
+      moodChart.data.labels = chartLabels;
+      moodChart.data.datasets[0].data = chartData;
+      moodChart.update();
+    }
+
+    // View selector
+    document.getElementById('view-select').addEventListener('change', updateChart);
+
+    // Initialize
+    displayDate();
+    updateChart();
+  </script>
+</body>
+</html>

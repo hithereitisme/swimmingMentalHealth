@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Swim Mind</title>
+  <link rel="stylesheet" href="intro.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <h1 class="logo">Swim Mind</h1>
+    <div class="nav-buttons">
+      <button class="btn secondary" onclick="goToLogin()">Login</button>
+      <button class="btn primary" onclick="goToSignup()">Sign Up</button>
+    </div>
+  </header>
+
+  <!-- Main Hero Section -->
+  <section class="hero">
+    <div class="carousel">
+      <div class="slide active">
+        <h2>Dive Into Clarity</h2>
+        <p>Track your emotions, reflect on your thoughts, and find balance every day with Swim Mind.</p>
+      </div>
+      <div class="slide">
+        <h2>Visualize Your Mood</h2>
+        <p>Beautiful analytics help you see your emotional patterns and stay mindful of your progress.</p>
+      </div>
+      <div class="slide">
+        <h2>Grow with Mindfulness</h2>
+        <p>Daily insights and reflections help you stay calm, centered, and confident throughout your journey.</p>
+      </div>
+
+      <button class="arrow left" onclick="prevSlide()"><i class="fa fa-chevron-left"></i></button>
+      <button class="arrow right" onclick="nextSlide()"><i class="fa fa-chevron-right"></i></button>
+    </div>
+  </section>
+
+  <script>
+    // Navigation functions
+    function goToLogin() {
+      window.location.href = "login.html";
+    }
+
+    function goToSignup() {
+      window.location.href = "signup.html";
+    }
+
+    // Carousel logic
+    let slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    let autoSlideInterval;
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+      resetAutoSlide();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+      resetAutoSlide();
+    }
+
+    function autoSlide() {
+      autoSlideInterval = setInterval(() => {
+        nextSlide();
+      }, 5000);
+    }
+
+    function resetAutoSlide() {
+      clearInterval(autoSlideInterval);
+      autoSlide();
+    }
+
+    autoSlide();
+  </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swim Mind Dashboard</title>
+<link rel="stylesheet" href="dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Wave Background -->
+  <div class="wave-bg"></div>
+
+  <header>
+      <h1>Welcome, <span id="user-name"></span>!</h1>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+  </header>
+
+  <aside class="sidebar">
+      <button onclick="window.location.href='moodtracker.html'">Mood Tracker</button>
+      <button onclick="window.location.href='sleeptracker.html'">Sleep Tracker</button>
+      <button onclick="window.location.href='workouttracker.html'">Workout Tracker</button>
+      <button onclick="window.location.href='goalstracker.html'">Goals Tracker</button>
+      <button onclick="window.location.href='visualization.html'">Visualizations</button>
+      <button onclick="window.location.href='competitions.html'">Competitions</button>
+  </aside>
+
+  <main>
+      <div class="cards-container">
+          <div class="card">
+              <h3>Mood Tracker</h3>
+              <p id="mood-summary">No data yet.</p>
+          </div>
+          <div class="card">
+              <h3>Sleep Tracker</h3>
+              <p id="sleep-summary">No data yet.</p>
+          </div>
+          <div class="card">
+              <h3>Workout Tracker</h3>
+              <p id="workout-summary">No data yet.</p>
+          </div>
+          <div class="card">
+              <h3>Goals Tracker</h3>
+              <p id="goals-summary">No goals achieved yet.</p>
+          </div>
+      </div>
+
+      <section class="chart-section">
+          <h2>Mood Over Time</h2>
+          <canvas id="moodChart"></canvas>
+          <div class="chart-buttons-container">
+              <button class="chart-btn" onclick="setChartRange('day')">Day</button>
+              <button class="chart-btn" onclick="setChartRange('week')">Week</button>
+              <button class="chart-btn" onclick="setChartRange('month')">Month</button>
+              <button class="chart-btn" onclick="setChartRange('year')">Year</button>
+          </div>
+      </section>
+
+      <section class="awards-section">
+          <h2>Awards</h2>
+          <div class="awards-container" id="awards-container">
+              <!-- Awards will populate here -->
+          </div>
+      </section>
+  </main>
+
+  <footer>
+      <p>© 2025 Swim Mind App | Track your emotions, strengthen your mind!</p>
+  </footer>
+
+<script>
+const loggedInUser = localStorage.getItem('loggedInUser');
+if (!loggedInUser) window.location.href = 'index.html';
+document.getElementById('user-name').innerText = loggedInUser;
+
+// Example: Only show data if it exists
+const userData = {
+  mood: localStorage.getItem('todayMood') || null,
+  sleep: localStorage.getItem('todaySleep') || null,
+  workout: localStorage.getItem('todayWorkout') || null,
+  goals: localStorage.getItem('todayGoals') || null
+};
+
+document.getElementById('mood-summary').innerText = userData.mood ? `Today you are feeling ${userData.mood}` : 'No data yet.';
+document.getElementById('sleep-summary').innerText = userData.sleep ? `You got ${userData.sleep} hrs of sleep` : 'No data yet.';
+document.getElementById('workout-summary').innerText = userData.workout ? `You worked out ${userData.workout} today` : 'No data yet.';
+document.getElementById('goals-summary').innerText = userData.goals ? `${userData.goals} goal(s) achieved today!` : 'No goals achieved yet.';
+
+// Awards example
+const awardsContainer = document.getElementById('awards-container');
+const awards = JSON.parse(localStorage.getItem('awards')) || [];
+awards.forEach(a => {
+  const card = document.createElement('div');
+  card.classList.add('award-card');
+  card.innerHTML = `<h4>${a.title} 🏅</h4><p>${a.message}</p>`;
+  awardsContainer.appendChild(card);
+});
+
+// Chart setup
+const ctx = document.getElementById('moodChart').getContext('2d');
+let moodData = JSON.parse(localStorage.getItem('moodData')) || [];
+
+const moodChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: moodData.map(m => m.date),
+    datasets: [{
+      label: 'Mood Rating (1-6)',
+      data: moodData.map(m => m.rating),
+      borderColor: '#0077b6',
+      backgroundColor: 'rgba(0, 119, 182, 0.2)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 5,
+      pointHoverRadius: 7
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { min: 1, max: 6, ticks: { stepSize: 1 } }
+    }
+  }
+});
+
+// Chart range function
+function setChartRange(range) {
+  // Here you can filter moodData by day/week/month/year
+  moodChart.update();
+}
+</script>
+</body>
+</html>

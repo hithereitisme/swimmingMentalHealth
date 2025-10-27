@@ -1,0 +1,138 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom right, #4b6cb7, #182848); /* Dark night gradient */
+  color: #f0f0f0;
+  overflow-x: hidden;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2rem;
+  background: rgba(20, 30, 70, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #fff;
+}
+
+.back-btn {
+  background-color: #6a5acd; /* Slate purple */
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.back-btn:hover {
+  background-color: #483d8b; /* Darker purple */
+}
+
+/* Main */
+main {
+  padding: 2rem;
+  text-align: center;
+}
+
+.sleep-section {
+  margin-bottom: 2rem;
+}
+
+.date-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.date-navigation button {
+  background: #6a5acd;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.date-navigation button:hover {
+  background: #483d8b;
+}
+
+.sleep-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.sleep-inputs input {
+  width: 80px;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  background-color: #2c3e50;
+  color: #fff;
+}
+
+.sleep-inputs label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 500;
+}
+
+#save-btn {
+  background-color: #00bfff; /* Deep sky blue */
+  border: none;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+#save-btn:hover {
+  background-color: #1e90ff; /* Dodger blue */
+}
+
+#sleep-message {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #87cefa; /* Light blue */
+}
+
+/* Chart Section */
+.chart-section {
+  max-width: 900px;
+  width: 90%;
+  margin: 0 auto;
+  background-color: rgba(30, 40, 70, 0.85);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.chart-section canvas {
+  width: 100% !important;
+  height: 400px !important;
+}
+
+footer {
+  text-align: center;
+  padding: 0.8rem;
+  font-size: 0.85rem;
+  color: #ccc;
+}
