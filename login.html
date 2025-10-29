@@ -1,89 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Swim Mind - Login</title>
-  <link rel="stylesheet" href="login.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Swim Mind</title>
+  <link rel="stylesheet" href="login.css">
 </head>
 <body>
-  <!-- Background waves -->
-  <div class="wave-bg"></div>
-
   <header>
     <h1 class="app-title">Swim Mind</h1>
   </header>
 
-  <main>
+  <div class="main-content">
     <div class="card-container">
-      <!-- Login Card -->
-      <div class="card login-card" id="login-card">
-        <h2>Welcome Back</h2>
-        <p class="subheading">Dive into your mental wellness dashboard</p>
-
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-
-        <button onclick="login()" class="btn"><i class="fa fa-sign-in-alt"></i> Login</button>
-        <p id="message" class="message"></p>
-
-        <p class="toggle-text">Don't have an account? 
-          <span class="link" onclick="showSignup()">Sign Up</span>
-        </p>
-      </div>
-
-      <!-- Sign Up Card -->
-      <div class="card login-card" id="signup-card" style="display:none;">
-        <h2>Create Account</h2>
-        <p class="subheading">Start your Swim Mind journey</p>
-
-        <input type="text" id="new-username" placeholder="Username">
-        <input type="password" id="new-password" placeholder="Password">
-
-        <button onclick="signup()" class="btn"><i class="fa fa-user-plus"></i> Sign Up</button>
-        <p id="signup-message" class="message"></p>
-
-        <p class="toggle-text">Already have an account? 
-          <span class="link" onclick="showLogin()">Login</span>
-        </p>
+      <div class="card">
+        <h2>Login</h2>
+        <p class="subheading">Enter your credentials</p>
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button class="btn">Login</button>
+        <p class="toggle-text">Don't have an account? <span class="link">Sign up</span></p>
       </div>
     </div>
-  </main>
+  </div>
 
-  <footer>
-    <p>© 2025 Swim Mind | Balance. Focus. Grow.</p>
-  </footer>
-
-  <script>
-    function showSignup() {
-      document.getElementById('login-card').style.display = 'none';
-      document.getElementById('signup-card').style.display = 'block';
-    }
-    function showLogin() {
-      document.getElementById('signup-card').style.display = 'none';
-      document.getElementById('login-card').style.display = 'block';
-    }
-    function login() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-      if (username && password) {
-        localStorage.setItem("loggedInUser", username);
-        window.location.href = "dashboard.html";
-      } else {
-        document.getElementById("message").textContent = "Please enter valid credentials.";
-      }
-    }
-    function signup() {
-      const newUser = document.getElementById("new-username").value.trim();
-      const newPass = document.getElementById("new-password").value.trim();
-      if (newUser && newPass) {
-        localStorage.setItem("user_" + newUser, newPass);
-        document.getElementById("signup-message").textContent = "Account created! Please log in.";
-      } else {
-        document.getElementById("signup-message").textContent = "Please fill out all fields.";
-      }
-    }
-  </script>
+  <footer>© 2025 Swim Mind</footer>
 </body>
 </html>
