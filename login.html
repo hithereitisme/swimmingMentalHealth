@@ -7,23 +7,43 @@
   <link rel="stylesheet" href="login.css">
 </head>
 <body>
+  <!-- Header -->
   <header>
     <h1 class="app-title">Swim Mind</h1>
   </header>
 
-  <div class="main-content">
-    <div class="card-container">
-      <div class="card">
-        <h2>Login</h2>
-        <p class="subheading">Enter your credentials</p>
-        <input type="text" placeholder="Username">
-        <input type="password" placeholder="Password">
-        <button class="btn">Login</button>
-        <p class="toggle-text">Don't have an account? <span class="link">Sign up</span></p>
-      </div>
+  <!-- Card Container -->
+  <div class="card-container">
+    <div class="card">
+      <h2>Login</h2>
+      <p class="subheading">Welcome back! Enter your details to continue.</p>
+
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+
+      <button class="btn" id="login-btn">Login</button>
+
+      <p class="toggle-text">Don't have an account? 
+        <span class="link" id="go-signup">Sign Up</span>
+      </p>
     </div>
   </div>
 
-  <footer>© 2025 Swim Mind</footer>
+  <footer>
+    © 2025 Swim Mind App
+  </footer>
+
+  <script>
+    // Redirect to dashboard on login
+    document.getElementById('login-btn').addEventListener('click', () => {
+      // Here you could add validation logic if needed
+      window.location.href = 'dashboard.html';
+    });
+
+    // Redirect to signup page
+    document.getElementById('go-signup').addEventListener('click', () => {
+      window.location.href = 'signup.html';
+    });
+  </script>
 </body>
 </html>
