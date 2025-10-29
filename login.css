@@ -15,34 +15,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   overflow: hidden;
-  padding: 2vh 3vw; /* spacing scales smoothly */
-}
-
-/* Animated Wave Background */
-.wave-bg::before,
-.wave-bg::after {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: 0;
-  left: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), transparent 70%),
-              radial-gradient(circle at 70% 70%, rgba(255,255,255,0.15), transparent 80%);
-  animation: moveWaves 10s ease-in-out infinite alternate;
-  z-index: 0;
-}
-
-@keyframes moveWaves {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(-5%, -5%) scale(1.05); }
+  padding: 2vh 3vw;
 }
 
 /* Header */
 header {
-  margin-top: 3vh;
+  margin-top: 3vh; /* spacing from top */
   text-align: center;
   z-index: 1;
 }
@@ -55,22 +34,31 @@ header {
   text-shadow: 0 3px 6px rgba(0,0,0,0.25);
 }
 
+/* Main content wrapper to center card */
+.main-content {
+  flex: 1; /* take remaining space */
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  width: 100%;
+}
+
 /* Card container */
 .card-container {
   position: relative;
   z-index: 1;
   display: flex;
   justify-content: center;
-  width: 85%;        /* slightly bigger */
-  max-width: 500px;  /* slightly bigger */
-  min-width: 300px;  /* slightly bigger */
+  width: 80%;
+  max-width: 400px;
+  min-width: 270px;
 }
 
 /* Card Styling */
 .card {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 1rem;
-  padding: clamp(2.5rem, 5vw, 3.5rem); /* slightly bigger */
+  padding: clamp(2rem, 4vw, 3rem);
   text-align: center;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
@@ -79,26 +67,26 @@ header {
 }
 
 .card h2 {
-  font-size: clamp(1.6rem, 2.5vw, 2rem); /* slightly bigger text */
-  margin-bottom: 0.6rem;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  margin-bottom: 0.5rem;
   color: #fff;
 }
 
 .subheading {
-  font-size: clamp(1rem, 1.7vw, 1.1rem); /* slightly bigger */
-  margin-bottom: 2rem;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  margin-bottom: 1.5rem;
   opacity: 0.9;
 }
 
 /* Input fields */
 input {
   width: 100%;
-  padding: clamp(0.8rem, 1.3vw, 1.1rem); /* slightly bigger */
+  padding: clamp(0.7rem, 1.2vw, 1rem);
   margin-bottom: 1.2rem;
   border-radius: 2rem;
   border: none;
   outline: none;
-  font-size: clamp(0.95rem, 1.4vw, 1.05rem); /* slightly bigger */
+  font-size: clamp(0.9rem, 1.3vw, 1rem);
   background: rgba(255, 255, 255, 0.9);
   color: #333;
   transition: 0.3s;
@@ -114,9 +102,9 @@ input:focus {
   border: none;
   border-radius: 25px;
   color: #fff;
-  font-size: clamp(1rem, 1.5vw, 1.05rem); /* slightly bigger */
+  font-size: clamp(0.95rem, 1.4vw, 1rem);
   font-weight: 600;
-  padding: clamp(0.9rem, 1.5vw, 1.1rem); /* slightly bigger */
+  padding: clamp(0.8rem, 1.3vw, 1rem);
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
@@ -159,9 +147,9 @@ footer {
   color: rgba(255,255,255,0.8);
 }
 
-/* Responsive (extra protection for smaller screens) */
+/* Responsive */
 @media (max-width: 480px) {
   .card {
-    padding: 2.5rem;
+    padding: 2rem;
   }
 }
