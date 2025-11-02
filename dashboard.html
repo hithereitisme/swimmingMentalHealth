@@ -11,12 +11,8 @@
   <!-- Wave Background -->
   <div class="wave-bg"></div>
 
-  <header>
-      <h1>Welcome, <span id="user-name"></span>!</h1>
-      <button class="logout-btn" onclick="logout()">Logout</button>
-  </header>
-
   <aside class="sidebar">
+      <button id="sidebar-toggle" class="sidebar-toggle">☰</button>
       <button onclick="window.location.href='moodtracker.html'">Mood Tracker</button>
       <button onclick="window.location.href='sleeptracker.html'">Sleep Tracker</button>
       <button onclick="window.location.href='workouttracker.html'">Workout Tracker</button>
@@ -24,6 +20,11 @@
       <button onclick="window.location.href='visualization.html'">Visualizations</button>
       <button onclick="window.location.href='competitions.html'">Competitions</button>
   </aside>
+
+  <header>
+      <h1>Welcome, <span id="user-name"></span>!</h1>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+  </header>
 
   <main>
       <div class="cards-container">
@@ -58,9 +59,7 @@
 
       <section class="awards-section">
           <h2>Awards</h2>
-          <div class="awards-container" id="awards-container">
-              <!-- Awards will populate here -->
-          </div>
+          <div class="awards-container" id="awards-container"></div>
       </section>
   </main>
 
@@ -69,24 +68,24 @@
   </footer>
 
 <script>
+// User check
 const loggedInUser = localStorage.getItem('loggedInUser');
 if (!loggedInUser) window.location.href = 'index.html';
 document.getElementById('user-name').innerText = loggedInUser;
 
-// Example: Only show data if it exists
+// Populate summaries
 const userData = {
   mood: localStorage.getItem('todayMood') || null,
   sleep: localStorage.getItem('todaySleep') || null,
   workout: localStorage.getItem('todayWorkout') || null,
   goals: localStorage.getItem('todayGoals') || null
 };
-
 document.getElementById('mood-summary').innerText = userData.mood ? `Today you are feeling ${userData.mood}` : 'No data yet.';
 document.getElementById('sleep-summary').innerText = userData.sleep ? `You got ${userData.sleep} hrs of sleep` : 'No data yet.';
 document.getElementById('workout-summary').innerText = userData.workout ? `You worked out ${userData.workout} today` : 'No data yet.';
 document.getElementById('goals-summary').innerText = userData.goals ? `${userData.goals} goal(s) achieved today!` : 'No goals achieved yet.';
 
-// Awards example
+// Populate awards
 const awardsContainer = document.getElementById('awards-container');
 const awards = JSON.parse(localStorage.getItem('awards')) || [];
 awards.forEach(a => {
@@ -96,10 +95,9 @@ awards.forEach(a => {
   awardsContainer.appendChild(card);
 });
 
-// Chart setup
+// Mood chart setup
 const ctx = document.getElementById('moodChart').getContext('2d');
 let moodData = JSON.parse(localStorage.getItem('moodData')) || [];
-
 const moodChart = new Chart(ctx, {
   type: 'line',
   data: {
@@ -123,12 +121,20 @@ const moodChart = new Chart(ctx, {
     }
   }
 });
+function setChartRange(range) { moodChart.update(); }
 
-// Chart range function
-function setChartRange(range) {
-  // Here you can filter moodData by day/week/month/year
-  moodChart.update();
+// Logout
+function logout() {
+  localStorage.removeItem('loggedInUser');
+  window.location.href = 'index.html';
 }
+
+// Sidebar toggle
+const sidebar = document.querySelector('.sidebar');
+const toggleBtn = document.getElementById('sidebar-toggle');
+toggleBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('collapsed');
+});
 </script>
 </body>
 </html>
