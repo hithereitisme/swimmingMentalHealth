@@ -34,6 +34,7 @@ function signup() {
 }
 
 // Login user
+// Login user
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -42,7 +43,8 @@ function login() {
 
     if (users[username] && users[username] === password) {
         localStorage.setItem('loggedInUser', username);
-        window.location.href = 'dashboard.html';
+        // Use relative path for GitHub Pages
+        window.location.href = './dashboard.html';
     } else {
         document.getElementById('message').innerText = 'Invalid username or password';
     }
@@ -51,5 +53,5 @@ function login() {
 // Logout user
 function logout() {
     localStorage.removeItem('loggedInUser');
-    window.location.href = "index.html";
+    window.location.href = './index.html';
 }
