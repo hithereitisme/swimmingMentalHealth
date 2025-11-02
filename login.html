@@ -1,49 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Swim Mind</title>
-  <link rel="stylesheet" href="login.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Swim Mind</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="login.css" />
 </head>
 <body>
-  <!-- Header -->
   <header>
     <h1 class="app-title">Swim Mind</h1>
   </header>
 
-  <!-- Card Container -->
   <div class="card-container">
-    <div class="card">
+    <div class="card login-card">
       <h2>Login</h2>
-      <p class="subheading">Welcome back! Enter your details to continue.</p>
-
-      <input type="email" id="email" placeholder="Email">
-      <input type="password" id="password" placeholder="Password">
-
-      <button class="btn" id="login-btn">Login</button>
-
-      <p class="toggle-text">Don't have an account? 
-        <span class="link" id="go-signup">Sign Up</span>
+      <input type="text" placeholder="Username" id="username" />
+      <input type="password" placeholder="Password" id="password" />
+      <button class="btn" onclick="login()">Login</button>
+      <p id="message" class="toggle-text"></p>
+      <p class="toggle-text">
+        Don't have an account? <a href="signup.html" class="link">Sign Up</a>
       </p>
     </div>
   </div>
 
   <footer>
-    © 2025 Swim Mind App
+    <p>© 2025 Swim Mind App | Track your emotions, strengthen your mind!</p>
   </footer>
 
-  <script>
-    // Redirect to dashboard on login
-    document.getElementById('login-btn').addEventListener('click', () => {
-      // Here you could add validation logic if needed
-      window.location.href = 'dashboard.html';
-    });
-
-    // Redirect to signup page
-    document.getElementById('go-signup').addEventListener('click', () => {
-      window.location.href = 'signup.html';
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
