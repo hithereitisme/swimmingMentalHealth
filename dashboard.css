@@ -53,23 +53,6 @@ header h1 { font-size: 1.5rem; }
   width: 60px;
 }
 
-/* Sidebar toggle button inside sidebar */
-.sidebar-toggle {
-  font-size: 1.2rem;
-  background: #0077b6;
-  border: none;
-  color: #fff;
-  padding: 0.6rem;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  text-align: center;
-  transition: background 0.3s;
-}
-.sidebar-toggle:hover {
-  background: #00b4d8;
-}
-
 /* Sidebar buttons */
 .sidebar button {
   margin: 5px 0;
@@ -89,7 +72,7 @@ header h1 { font-size: 1.5rem; }
 
 /* Main content */
 main {
-  margin-left: 220px;
+  margin-left: 240px; /* more space from sidebar */
   margin-top: 80px;
   padding: 2rem;
   flex: 1;
@@ -105,7 +88,7 @@ main {
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
+  gap: 2rem; /* increased gap for more spacing */
   margin-bottom: 2rem;
 }
 
@@ -123,7 +106,7 @@ main {
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem; /* more spacing */
   height: 300px;
   display: flex;
   flex-direction: column;
@@ -152,8 +135,8 @@ main {
 
 /* Awards section */
 .awards-section {
-  margin-top: 7rem;
-  margin-bottom: 2rem;
+  margin-top: 8rem; /* increased top margin */
+  margin-bottom: 2.5rem;
 }
 .awards-container {
   display: flex;
@@ -174,5 +157,23 @@ main {
 @media (max-width: 768px) {
   .sidebar { width: 60px; }
   .sidebar.collapsed { width: 60px; }
-  main { margin-left: 60px; }
+  main { margin-left: 60px; padding: 1.5rem; }
+  .cards-container { gap: 1.5rem; }
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: rgba(0, 48, 71, 0.8);
+  font-size: 0.9rem;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+  z-index: 100;
 }
